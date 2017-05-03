@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.silicolife.dddecaf.modelhandling.AddToResponseFactory;
+import com.silicolife.dddecaf.modelhandling.ModelParameterModificationFactory;
+
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.Container;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.InvalidBooleanRuleException;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.io.readers.JSONReader;
@@ -45,42 +48,59 @@ public class SimulationController {
 		String path = SimulationController.class.getClassLoader().getResource("modelRepo").getFile();
 
 		String modelPath = path + "/" + id + ".json";
-		
-		if(!(new File(modelPath).exists())){
-			throw new RuntimeException("Model "+id+" not yet available.");
+
+		if (!(new File(modelPath).exists())) {
+			throw new RuntimeException("Model " + id + " not yet available.");
 		}
-		
+
 		JSONReader reader = new JSONReader(modelPath, "");
-		
+
 		return new Container(reader);
 	}
-	
-	
-	@RequestMapping(value="model/{id}", method=RequestMethod.POST)
+
+	@RequestMapping(value = "modeltest/{id}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Double> simulateModel(@PathVariable("id") String id, @RequestBody Map<String, Object> input) throws Exception {
-		
+	public Map<String, Double> simulateModel(@PathVariable("id") String id, @RequestBody Map<String, Object> input)
+			throws Exception {
+
 		Container container = getModelFromID(id);
-		
+
+		Set<String> ext = container.searchReactionById(Pattern.compile(".*_b"));
+		container.removeMetabolites(ext);
+
+		ContainerConverter conv = new ContainerConverter(container);
+
+		ISteadyStateModel model = conv.convert();
+
+		SimulationSteadyStateControlCenter cc = new SimulationSteadyStateControlCenter(null, null, model,
+				SimulationProperties.FBA);
+		cc.setSolver(SolverType.CPLEX3);
+		cc.setMaximization(true);
+
+		cc.setFBAObjSingleFlux(model.getBiomassFlux(), 1.0);
+
+		SteadyStateSimulationResult res = cc.simulate();
+
+		System.out.println("\n\n\n" + input);
+
+		return res.getFluxValues();
+	}
+
+	@RequestMapping(value = "model/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> model(@PathVariable("id") String id, @RequestBody Map<String, Object> input)
+			throws Exception {
+		Container container = getModelFromID(id);
+
 		Set<String> ext = container.searchReactionById(Pattern.compile(".*_b"));
 		container.removeMetabolites(ext);
 		
-		ContainerConverter conv = new ContainerConverter(container);
+		ModelParameterModificationFactory modelParamFactory = new ModelParameterModificationFactory();
+		modelParamFactory.execute(container, input);
 		
-		ISteadyStateModel model = conv.convert();
+		AddToResponseFactory addToResponseFactory = new AddToResponseFactory();
 		
-		SimulationSteadyStateControlCenter cc = new SimulationSteadyStateControlCenter(null, null, model, SimulationProperties.FBA);
-		cc.setSolver(SolverType.CPLEX3);
-		cc.setMaximization(true);
-		
-		cc.setFBAObjSingleFlux(model.getBiomassFlux(), 1.0);
-	
-		SteadyStateSimulationResult res = cc.simulate();
-		
-		System.out.println("\n\n\n"+input);
-		
-		return res.getFluxValues();
-	}	
-	
-	
+		return addToResponseFactory.execute(container, input); 
+	}
+
 }
