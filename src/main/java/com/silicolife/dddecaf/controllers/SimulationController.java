@@ -9,7 +9,9 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,9 +56,9 @@ public class SimulationController {
 	}
 	
 	
-	@RequestMapping("model/{id}")
+	@RequestMapping(value="model/{id}", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Double> simulateModel(@PathVariable("id") String id) throws Exception {
+	public Map<String,Double> simulateModel(@PathVariable("id") String id, @RequestBody Map<String, Object> input) throws Exception {
 		
 		Container container = getModelFromID(id);
 		
@@ -74,6 +76,8 @@ public class SimulationController {
 		cc.setFBAObjSingleFlux(model.getBiomassFlux(), 1.0);
 	
 		SteadyStateSimulationResult res = cc.simulate();
+		
+		System.out.println("\n\n\n"+input);
 		
 		return res.getFluxValues();
 	}	
