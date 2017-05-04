@@ -1,5 +1,6 @@
 package com.silicolife.dddecaf.modelhandling;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.silicolife.dddecaf.utils.IModifyModelParameter;
@@ -8,13 +9,22 @@ import pt.uminho.ceb.biosystems.mew.biocomponents.container.Container;
 
 public class ModelParameterModificationFactory {
 
-	public Map<String, IModifyModelParameter> registry;
+	private static ModelParameterModificationFactory instance;
 	
-	static{
-		
+	public static ModelParameterModificationFactory getInstance() {
+		if(instance == null){
+			instance = new ModelParameterModificationFactory();
+		}
+		return instance;
 	}
 	
-	public Container execute(Container container, Map<String,Object> parameters){
+	private ModelParameterModificationFactory(){
+		registry = new HashMap<>();
+	}
+	
+	public Map<String, IModifyModelParameter> registry;
+	
+	public Container execute(Container container, Map<String,Object> parameters) throws Exception{
 		Container newContainer = new Container(container);
 		
 		for(IModifyModelParameter modifier : registry.values()){
@@ -23,5 +33,9 @@ public class ModelParameterModificationFactory {
 		
 		return newContainer;
 	}
+
 	
+	public void putModelParameterModification(String id, IModifyModelParameter info){
+		registry.put(id, info);
+	}
 }

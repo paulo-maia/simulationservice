@@ -6,6 +6,6 @@ import pt.uminho.ceb.biosystems.mew.biocomponents.container.Container;
 
 public interface IModifyModelParameter {
 
-	void modify(Container container, Map<String,Object> parameters);
+	void modify(Container container, Map<String,Object> parameters) throws Exception;
 	
 }

@@ -95,12 +95,8 @@ public class SimulationController {
 		Set<String> ext = container.searchReactionById(Pattern.compile(".*_b"));
 		container.removeMetabolites(ext);
 		
-		ModelParameterModificationFactory modelParamFactory = new ModelParameterModificationFactory();
-		modelParamFactory.execute(container, input);
-		
-		AddToResponseFactory addToResponseFactory = new AddToResponseFactory();
-		
-		return addToResponseFactory.execute(container, input); 
+		ModelParameterModificationFactory.getInstance().execute(container, input);
+		return AddToResponseFactory.getInstance().execute(container, input);
 	}
 
 }
