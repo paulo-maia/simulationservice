@@ -17,7 +17,7 @@ public class AddToResponseFactory {
 		if(instance == null){
 			instance = new AddToResponseFactory();
 			instance.putAddResponse("simulation_methods", new SimulationAddResponce());
-			instance.putAddResponse("json_model", new JsonModelAddResponce());
+//			instance.putAddResponse("json_model", new JsonModelAddResponce());
 		}
 		return instance;
 	}

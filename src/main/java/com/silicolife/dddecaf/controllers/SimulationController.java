@@ -72,8 +72,7 @@ public class SimulationController {
 
 		ISteadyStateModel model = conv.convert();
 
-		SimulationSteadyStateControlCenter cc = new SimulationSteadyStateControlCenter(null, null, model,
-				SimulationProperties.FBA);
+		SimulationSteadyStateControlCenter cc = new SimulationSteadyStateControlCenter(null, null, model, SimulationProperties.FBA);
 		cc.setSolver(SolverType.CPLEX3);
 		cc.setMaximization(true);
 

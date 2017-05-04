@@ -3,6 +3,7 @@ package com.silicolife.dddecaf.modelhandling;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.silicolife.dddecaf.modelhandling.modifiers.MewEnvCondition;
 import com.silicolife.dddecaf.utils.IModifyModelParameter;
 
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.Container;
@@ -15,6 +16,7 @@ public class ModelParameterModificationFactory {
 		if(instance == null){
 			instance = new ModelParameterModificationFactory();
 		}
+		instance.putModelParameterModification("envConditions", new MewEnvCondition());
 		return instance;
 	}
 	
