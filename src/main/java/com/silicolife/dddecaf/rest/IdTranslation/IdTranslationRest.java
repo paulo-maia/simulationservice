@@ -38,17 +38,20 @@ public class IdTranslationRest {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Map<String,Object> translateIDsFromTo(List<String> ids, String from, String to) throws UnirestException{
+	public static Map<String,Object> translateIDsFromTo(List<String> ids, String from, String to) throws UnirestException, IOException{
 		HttpResponse<Map> response = Unirest.post("https://api.dd-decaf.eu/idmapping/query")
 				.header("accept", "application/json")
 				.body(buildJSONBody(from, to, ids))
 				.asObject(Map.class);
 			
 		System.out.println(response.getBody().toString());
-		return response.getBody();		
+		Map<String,Object> toret = response.getBody();
+		Unirest.shutdown();
+		
+		return toret;
 	}
 	
-	public static Map<String, Object> translateIDsFromChebiToBiGG(List<String> ids) throws UnirestException{
+	public static Map<String, Object> translateIDsFromChebiToBiGG(List<String> ids) throws UnirestException, IOException{
 		return translateIDsFromTo(ids, "chebi", "bigg");
 	}
 	
