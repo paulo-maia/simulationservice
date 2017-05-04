@@ -80,9 +80,6 @@ public class SimulationController {
 		cc.setFBAObjSingleFlux(model.getBiomassFlux(), 1.0);
 
 		SteadyStateSimulationResult res = cc.simulate();
-
-		System.out.println("\n\n\n" + input);
-
 		return res.getFluxValues();
 	}
 
