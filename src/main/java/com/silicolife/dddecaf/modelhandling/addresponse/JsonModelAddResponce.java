@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.StringWriter;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.silicolife.dddecaf.utils.IAddResponse;
 
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.Container;
@@ -20,8 +22,13 @@ public class JsonModelAddResponce implements IAddResponse{
 		BufferedWriter bw = new BufferedWriter(w);
 		
 		JSONWriter writer = new JSONWriter(bw, container);
-		writer.writeToFile();
-		response.put("model", w.toString());
+		writer.writeToFile(false);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode map = mapper.readTree(w.toString());
+		
+		
+		response.put("model", map);
 		
 		
 	}
