@@ -1,6 +1,7 @@
 package com.silicolife.dddecaf.modelhandling;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.silicolife.dddecaf.modelhandling.addresponse.JsonModelAddResponce;
@@ -16,8 +17,8 @@ public class AddToResponseFactory {
 	public static AddToResponseFactory getInstance(){
 		if(instance == null){
 			instance = new AddToResponseFactory();
-			instance.putAddResponse("simulation_methods", new SimulationAddResponce());
-//			instance.putAddResponse("json_model", new JsonModelAddResponce());
+			instance.putAddResponse("fluxes", new SimulationAddResponce());
+			instance.putAddResponse("model", new JsonModelAddResponce());
 		}
 		return instance;
 	}
@@ -30,8 +31,13 @@ public class AddToResponseFactory {
 
 	public Map<String, Object> execute(Container container, Map<String, Object> parameters) throws Exception{
 		Map<String, Object> response = new HashMap<>();
-		for (IAddResponse modifier : registry.values()) {
-			modifier.addToResponse(response, container, parameters);
+		
+		
+		List<String> r = (List<String>) parameters.get("to-return");
+		for (String modifier : r) {
+			IAddResponse o = registry.get(modifier);
+			if(o!=null)
+				o.addToResponse(response, container, parameters);
 		}
 		
 		return response;

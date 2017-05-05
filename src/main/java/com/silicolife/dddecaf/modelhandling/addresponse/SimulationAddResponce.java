@@ -36,7 +36,7 @@ public class SimulationAddResponce implements IAddResponse{
 		
 		
 		SimulationSteadyStateControlCenter cc = new SimulationSteadyStateControlCenter(environmentalConditions, geneticConditions, model, method);
-		cc.setSolver(SolverType.CPLEX3);
+		cc.setSolver(SolverType.CPLEX);
 		cc.setMaximization(true);
 		return cc.simulate().getFluxValues();
 	}
@@ -52,7 +52,7 @@ public class SimulationAddResponce implements IAddResponse{
 		
 		String method = getMewMethodIdFromDDDECAF(parameters);
 		if(method !=  null){
-			response.put("results", result(container, parameters, method));
+			response.put("fluxes", result(container, parameters, method));
 		}
 		
 	}
