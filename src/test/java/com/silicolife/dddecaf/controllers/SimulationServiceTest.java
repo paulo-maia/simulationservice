@@ -1,11 +1,20 @@
 package com.silicolife.dddecaf.controllers;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+
+import pt.uminho.ceb.biosystems.mew.biocomponents.container.Container;
+import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.InvalidBooleanRuleException;
+import pt.uminho.ceb.biosystems.mew.biocomponents.container.io.readers.JSONReader;
+import pt.uminho.ceb.biosystems.mew.biocomponents.container.io.writers.JSONWriter;
 
 public class SimulationServiceTest {
 
@@ -19,6 +28,24 @@ public class SimulationServiceTest {
 
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> TESTE TESTE TESTE <<<<<<<<<<<<<<<<<<<<<<<");
 		System.out.println(jsonResponse.getBody().toString());
+	}
+	
+	
+	@Test
+	public void testJsonWriter() throws JsonProcessingException, IOException, InvalidBooleanRuleException{
+		String path = SimulationController.class.getClassLoader().getResource("modelRepo").getFile();
+
+		String modelPath = path + "/" + "iJO1366" + ".json";
+
+
+		JSONReader reader = new JSONReader(modelPath, "");
+		Container cont = new Container(reader);
+		
+		StringWriter w = new StringWriter();
+		JSONWriter json = new JSONWriter(w, cont);
+		json.writeToFile();
+		System.out.println(w.toString());
+		
 	}
 
 }
