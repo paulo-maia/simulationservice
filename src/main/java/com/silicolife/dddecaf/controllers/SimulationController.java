@@ -1,6 +1,5 @@
 package com.silicolife.dddecaf.controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,15 +45,9 @@ public class SimulationController {
 	}
 
 	public Container getModelFromID(String id) throws IOException, InvalidBooleanRuleException {
-		String path = SimulationController.class.getClassLoader().getResource("modelRepo").getFile();
+		ClassPathResource cp = new ClassPathResource("modelRepo/"+id+".json");
 
-		String modelPath = path + "/" + id + ".json";
-
-		if (!(new File(modelPath).exists())) {
-			throw new RuntimeException("Model " + id + " not yet available.");
-		}
-
-		JSONReader reader = new JSONReader(modelPath, "");
+		JSONReader reader = new JSONReader(cp.getFile(), "");
 
 		return new Container(reader);
 	}
