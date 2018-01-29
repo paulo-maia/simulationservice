@@ -15,14 +15,14 @@ import pt.uminho.ceb.biosystems.mew.core.simulation.components.SimulationPropert
 import pt.uminho.ceb.biosystems.mew.core.simulation.components.SimulationSteadyStateControlCenter;
 import pt.uminho.ceb.biosystems.mew.solvers.SolverType;
 
-public class SimulationAddResponce implements IAddResponse{
+public class SimulationAddResponse implements IAddResponse{
 
 	public static String METHOD_TYPE = "simulation-method";
 	
 	
 	Map<String,String> methodsNameConvertion = new HashMap<>();
 	
-	public SimulationAddResponce(){
+	public SimulationAddResponse(){
 		methodsNameConvertion.put("fba", SimulationProperties.FBA);
 	}
 

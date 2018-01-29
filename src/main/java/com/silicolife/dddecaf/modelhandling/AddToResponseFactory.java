@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.silicolife.dddecaf.modelhandling.addresponse.JsonModelAddResponce;
-import com.silicolife.dddecaf.modelhandling.addresponse.SimulationAddResponce;
+import com.silicolife.dddecaf.modelhandling.addresponse.JsonModelAddResponse;
+import com.silicolife.dddecaf.modelhandling.addresponse.SimulationAddResponse;
 import com.silicolife.dddecaf.utils.IAddResponse;
 
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.Container;
@@ -17,8 +17,8 @@ public class AddToResponseFactory {
 	public static AddToResponseFactory getInstance(){
 		if(instance == null){
 			instance = new AddToResponseFactory();
-			instance.putAddResponse("fluxes", new SimulationAddResponce());
-			instance.putAddResponse("model", new JsonModelAddResponce());
+			instance.putAddResponse("fluxes", new SimulationAddResponse());
+			instance.putAddResponse("model", new JsonModelAddResponse());
 		}
 		return instance;
 	}

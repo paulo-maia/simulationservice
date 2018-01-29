@@ -11,7 +11,7 @@ import com.silicolife.dddecaf.utils.IAddResponse;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.Container;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.io.writers.JSONWriter;
 
-public class JsonModelAddResponce implements IAddResponse{
+public class JsonModelAddResponse implements IAddResponse{
 
 	@Override
 	public void addToResponse(Map<String, Object> response, Container container, Map<String, Object> parameters)

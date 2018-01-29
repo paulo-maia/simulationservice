@@ -46,7 +46,7 @@ public class IdTranslationRest {
 			
 		System.out.println(response.getBody().toString());
 		Map<String,Object> toret = response.getBody();
-		Unirest.shutdown();
+//		Unirest.shutdown();
 		
 		return toret;
 	}
